@@ -3,11 +3,17 @@ import 'package:get/get.dart';
 import 'package:kmodal_listview/cute_listview/cute_listview.dart';
 import 'package:kmodal_listview/klistview/controller/klistcontroller.dart';
 import 'package:kmodal_listview/klistview/kmodal.dart';
+import 'package:kmodal_listview/klistview/koptions.dart';
 
 class KListView<T> extends StatelessWidget {
   final KModal<T>? model;
+  final KOptions options;
 
-  KListView({@required this.model, Key? key}) : super(key: key) {
+  KListView({
+    @required this.model,
+    this.options = const KOptions(),
+    Key? key,
+  }) : super(key: key) {
     Get.lazyPut<KListController>(() => KListController(model: model),
         tag: model!.getKey);
   }
@@ -32,6 +38,7 @@ class KListView<T> extends StatelessWidget {
         case KScreenType.LIST:
           return Obx(
             () => CuteListView(
+              options: options,
               refreshController: model!.controller.refresher,
               onRefresh: _onRefresh,
               onLoadmore: _onLoadMore,

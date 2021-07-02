@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kmodal_listview/kmodal_listview.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 /// listview with refresh and loadmore widget
@@ -9,24 +10,16 @@ class CuteListView extends StatelessWidget {
   final EdgeInsets? padding;
   final int? itemCount;
   final IndexedWidgetBuilder? itemBuilder;
-  final TextStyle textStyle;
-  final String loadMoreText;
-  final String loadMoreFailureText;
-  final String releaseToLoadMoreText;
-  final String noMoreText;
+  final KOptions options;
 
   CuteListView({
     @required this.refreshController,
     @required this.itemCount,
     @required this.itemBuilder,
     this.padding,
-    this.textStyle = const TextStyle(fontSize: 13, color: Colors.black87),
-    this.loadMoreText = 'Load more',
-    this.loadMoreFailureText = 'Load more failured',
-    this.releaseToLoadMoreText = 'Release to load more',
-    this.noMoreText = 'No more data',
     this.onRefresh,
     this.onLoadmore,
+    this.options = const KOptions(),
     Key? key,
   }) : super(key: key);
 
@@ -41,20 +34,32 @@ class CuteListView extends StatelessWidget {
         enablePullUp: true,
         onRefresh: onRefresh,
         onLoading: onLoadmore,
-        header: ClassicHeader(),
+        header: ClassicHeader(
+          textStyle: options.headerStyle,
+          refreshingText: options.refreshingText,
+          idleText: options.refreshIdleText,
+          failedText: options.refreshFailureText,
+          completeText: options.refreshDoneText,
+          refreshingIcon: options.loadingIcon,
+        ),
         footer: CustomFooter(
           builder: (_, mode) {
             Widget body;
             if (mode == LoadStatus.idle) {
-              body = Text(loadMoreText, style: textStyle);
+              body = Text(options.moreIdleText, style: options.footerStyle);
             } else if (mode == LoadStatus.loading) {
-              body = CircularProgressIndicator(color: Colors.amber.shade300);
+              body = options.loadingIcon ??
+                  Container(
+                      width: 30,
+                      height: 30,
+                      child: CircularProgressIndicator(
+                          color: Theme.of(context).primaryColor));
             } else if (mode == LoadStatus.failed) {
-              body = Text(loadMoreFailureText, style: textStyle);
+              body = Text(options.moreFailureText, style: options.footerStyle);
             } else if (mode == LoadStatus.canLoading) {
-              body = Text(releaseToLoadMoreText, style: textStyle);
+              body = Text(options.releaseMoreText, style: options.footerStyle);
             } else {
-              body = Text(noMoreText, style: textStyle);
+              body = Text(options.noMoreText, style: options.footerStyle);
             }
             return Container(
               height: 50,

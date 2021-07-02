@@ -34,7 +34,17 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(widget.title)),
-      body: SafeArea(child: KListView<String>(model: MyModal())),
+      body: SafeArea(
+        child: KListView<String>(
+          model: MyModal(),
+          options: KOptions(
+            loadingIcon: Container(
+                width: 25,
+                height: 25,
+                child: CircularProgressIndicator(color: Colors.purple)),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -42,13 +52,16 @@ class _MyHomePageState extends State<MyHomePage> {
 ///===================================
 class MyModal extends KModal<String> {
   @override
-  Widget empty({VoidCallback? retryFunction}) => Container();
+  Widget empty({VoidCallback? retryFunction}) => Center(
+        child: Text('Empty Content'),
+      );
 
   @override
   String? get getKey => 'private_key';
 
   @override
   Widget listItem({String? data}) => Container(
+        color: Colors.green.shade200,
         padding: const EdgeInsets.all(20),
         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         child: Text(
@@ -58,9 +71,8 @@ class MyModal extends KModal<String> {
       );
 
   @override
-  Widget loading() => Container(
-        child: CircularProgressIndicator(color: Colors.red),
-      );
+  Widget loading() =>
+      Center(child: CircularProgressIndicator(color: Colors.red));
 
   @override
   Future<List<String>?> request({int page = 1}) async {
