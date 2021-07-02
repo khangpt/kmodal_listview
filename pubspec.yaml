@@ -1,7 +1,6 @@
 name: kmodal_listview
 description: ListView which can pull-to-refresh and proceed load-more. Benefit you feel free to process another of work
 version: 0.0.1
-author: Khang Pham<khang.phamthanh@gmail.com>
 homepage: https://github.com/khangpt/kmodal_listview
 
 environment:
